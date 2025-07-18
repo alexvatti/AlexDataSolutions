@@ -116,3 +116,37 @@ document.addEventListener('keydown', (e) => {
         modal.classList.remove('open');
     }
 });
+
+document.getElementById('contact-form').addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const form = e.target;
+  const payload = {
+    fields: {
+      Name: form.Name.value,
+      Email: form.Email.value,
+      Details: form.Details.value,
+      // add other fields here as needed
+    }
+  };
+
+  try {
+    const resp = await fetch(
+      'https://api.airtable.com/v0/appsbNsTNZIp4x3Yc/tblzAy8HApTLLlTpZ',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer patVQ7s1Hod0IhqL7'
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+    if (!resp.ok) throw new Error(`Airtable error: ${resp.status}`);
+    alert('✅ Submitted successfully!');
+    form.reset();
+  } catch (err) {
+    console.error(err);
+    alert('❌ Submission failed. See console for details.');
+  }
+});
